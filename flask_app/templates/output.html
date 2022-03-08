@@ -1,0 +1,53 @@
+{%extends "base.html"%}
+{%block title%} Users {%endblock%}
+{%block header%} Peeps {%endblock%}
+{%block main%}
+{% if session %}
+    <table>
+        <th>
+            ID
+        </th>
+        <th>
+            First
+        </th>
+        <th>
+            Last
+        </th>
+        <th>
+            Email
+        </th>
+        {% if session["logged_in"] == 0 %}
+            <th>
+                Options
+            </th>
+        {% endif %}
+
+        {%for i in output%}
+            <tr>
+                <td>
+                    {{i.id}}
+                </td>
+                <td>
+                    <a href="/user/read/{{i.id}}">{{i.first_name.title()}}</a>
+                </td>
+                <td>
+                    {{i.last_name.title()}}
+                </td>
+                <td>
+                    {{i.email}}
+                </td>
+                {% if session["logged_in"] == 0 %}
+                    <td>
+                        <a href='/user/update/{{i.id}}'>Edit</a> |
+                        <a href='/user/delete/{{i.id}}'>Delete</a>
+                    </td>
+                {% endif %}
+            </tr>
+        {%endfor%}
+    </table>
+    {% else %}
+        Try logging in...
+        <br>
+        <span class="emoji">🧁</span>
+{% endif %}
+{%endblock%}

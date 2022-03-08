@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+{%block title%}Users{%endblock%}
+{%block header%} Login {%endblock%}
+{%block main%}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for i in messages %}
+            <p>{{i}}</p>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form action="/user/log_in/process" method="post">
+        <label for="email">Email:</label>
+        <input type="text" name="email">
+        <label for="password">Password:</label>
+        <input type="password" name="password">
+        <input type="submit" value="Login">
+    </form>
+<a href="/user/create">Register</a>
+{%endblock%}

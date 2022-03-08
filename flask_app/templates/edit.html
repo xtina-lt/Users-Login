@@ -1,0 +1,59 @@
+{%extends 'base.html'%}
+{%block title%} Users {%endblock%}
+{%block header%} Output {%endblock%}
+{%block main%}
+    <ul>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for i in messages %}
+                    <li>
+                        {{i}}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </ul>
+
+    <form action="/user/update/process" method="POST">
+        <!-- id -->
+        <input type="hidden" name="id" value="{{output['id']}}">
+        <!-- first name -->
+        <label for="first_name">
+            First Name:
+        </label>
+        <input type="text" name="first_name" value="{{output['first_name']}}">
+        <!-- last name -->
+        <label for="last_name">
+            Last Name
+        </label>
+        <input type="text" name="last_name" value="{{output['last_name']}}">
+        <!-- email -->
+        <label for="email">
+            Email:
+        </label>
+        <input type="text" name="email" value="{{output['email']}}">
+        <!-- email -->
+        <label for="email">
+            Confirm Email:
+        </label>
+        <input type="text" name="confirm_email" value="{{output['email']}}">
+        <!-- password -->
+        <label for="">
+            Password*:
+        </label>
+        <input type="password" name="password">
+        <!-- password -->
+        <label for="">
+            New Password:
+        </label>
+        <input type="password" name="new_pass">
+        <!-- confirm Password -->
+        <label for="">
+            Confirm Password:
+        </label>
+        <input type="password" name="new_pass_check">
+        <!-- submit -->
+        <input type="submit" value="Change Me..">
+    </form>
+<a href="/user/read/{{output['id']}}">Go Back</a>
+{%endblock%}

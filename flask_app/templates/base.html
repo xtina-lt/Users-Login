@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦄{%block title%} {%endblock%}👩‍💻</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed&family=Lobster&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="/">
+                    🧁Home
+                </a>
+            </li>
+            {% if not session %}
+                <li>
+                    <a href="/user/login">
+                        🧁Login
+                    </a>
+                </li>
+                <li>
+                    <a href="/user/create">
+                        🧁Register
+                    </a>
+                </li>
+            {%endif%}
+            {% if session %}
+                <li>
+                    <a href="/users/read">
+                        🧁Users
+                    </a>
+                </li>
+                <li>
+                    <a href="/user/read/{{session['logged_in']}}">🧁Profile</a>
+                </li>
+                <li>
+                    <a href="/user/logout/process">
+                        🧁Logout
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <header>
+        <h1 class="purple">
+            🦄{%block header%} {%endblock%}👩‍💻
+        </h1>
+    </header>
+    <div class = container>
+        <main>
+            {%block main%}
+            {%endblock%}
+        </main>
+    </container>
+</body>
+</html>
