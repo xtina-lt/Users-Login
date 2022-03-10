@@ -16,7 +16,7 @@
                     🧁Home
                 </a>
             </li>
-            {% if not session %}
+            {% if not session['logged_in'] %}
                 <li>
                     <a href="/user/login">
                         🧁Login
@@ -28,7 +28,7 @@
                     </a>
                 </li>
             {%endif%}
-            {% if session %}
+            {% if session['logged_in'] %}
                 <li>
                     <a href="/users/read">
                         🧁Users

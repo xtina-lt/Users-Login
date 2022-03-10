@@ -46,18 +46,22 @@ def create_process():
     # 2) save to a new data dictionary
     if not User.validate_insert(data):
     # 3) VALIDATE form data
-    # 3) if not TRUE == if False
+    # 3) if not TRUE 
+    # 3)== False
         return redirect("/user/create")
         # 3a) IF FALSE
-        # 3a) return to create page
+        # 3a) return to create/register page
     else:
         data["password"] = bcrypt.generate_password_hash(request.form['password'])
-        # 3b) IF TRUE
-        # 3b) hash the password from form
+        # 4) IF TRUE
+        # 4) hash the password from form
+        # 4) so as to not input an unhashed password
         session["logged_in"] = User.insert(data)
-        # 4) logged in user = inserted user with data
-        # 4) save to use for later
-        return redirect("/users/read")
+        # 5) logged in user = inserted user with data
+        # 5) returns id number
+        # 5) save to use for later
+        return redirect(f"/user/read/{session['logged_in']}")
+        # 6) redirect to the user's information
 
 
 '''UPDATE'''
@@ -66,11 +70,10 @@ def edit_show(id):
     data={"id":id}
     # 1) get id from url
     # 1) save to data dictionary
-    output = User.select_one(data)
-    print(output)
+    result = User.select_one(data)
     # 2) select * from users WHERE id = data
     # 2) return cls(result[0])
-    return render_template("edit.html", output=output)
+    return render_template("edit.html", output=result)
     # 3) send to html
 
 @app.route("/user/update/process", methods=["POST"])
@@ -79,26 +82,29 @@ def edit_process():
     # 4) get updated form data
     # 4) save to dictionary
     if not User.validate_update(data):
+    # 5) IF NOT VALIDATED
     # 5) Valdiate Update with data from form
         return redirect(f"/user/update/{data['id']}") 
-        # 5a) IF FALSE
-        # 5a) go back
+        # 5a) go back to update form
     else:
-    # 5b) IF TRUE
+    # 6) IF VALIDATED
         if data["new_pass"]:
-        # 5b) IF TRUE
-        # & 5bi) and there is a new password
+        # 7) IF VALIDATED
+        # 7) & new password
             data["password"] = bcrypt.generate_password_hash(data["new_pass"])
+            # 8) hash new password
             User.update(data)
-            # 6) update users WHERE id = data['id']
+            # 9) update users WHERE id = data
         else:
-        # 5b) IF TRUE
-        # & 5bii) and there is NOT a new passowrd
+        # 7) IF VALIDATED
+        # 7) & no new password
             data["password"] = bcrypt.generate_password_hash(data["password"])
+            # 8) has password
             User.update(data)
-            # 6) update users WHERE id = data['id']
+            # 9) update users WHERE id = data['id']
         return redirect(f"/user/read/{data['id']}")
-        # 7) IF TRUE redirect to show user data
+        # 10) if validated 
+        # 10) redirect to show user data
 
 '''DELETE'''
 @app.route("/user/delete/<int:id>")
@@ -109,7 +115,7 @@ def delete(id):
     # 2) save id as dictionary
     User.delete(data)
     # 3) delete from users WHERE id = data
-    return redirect("/read/all")
+    return redirect("/users/read")
 
 '''LOGIN'''
 @app.route("/user/login")
@@ -123,7 +129,7 @@ def login_process():
     # 2) data dict with form inputs
     if not User.validate_login(data):
     # 3) VALIDATE
-        return redirect("/login")
+        return redirect("/user/login")
         # 3a) if validate != True
         # 3a) redirect back to form
     else:
@@ -131,7 +137,7 @@ def login_process():
         # 3b) if validate == True
         print(session)
         # 4) store user as session
-        # 4) use info gathered by email from data dict
+        # 4) get user information from email in form
         return redirect(f"/user/read/{session['logged_in']}")
         # 5) redirect to user information 
 

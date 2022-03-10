@@ -90,23 +90,28 @@ class User:
         # 1) set is_valid to Ture
         # 1) change if validation is False
         email=User.is_email(e)
-        # 2) check to see if an email is in the sytsem
-        
+        # 2) check to see if an email is in the db
         if email:
         # 3) IF EMAIL IN DB
-            check_me=User.select_one(email)
-            # 3a) use the first and only email
-            if not bcrypt.check_password_hash(check_me.password, e["password"]):
-            # 3b) hash form password
-            # 3b) comapre to already hashed password from db
+            if not bcrypt.check_password_hash(email['password'], e["password"]):
+            # 4) select_one( using is_email(e) )
+            # 4) gather already hashed password,
+            # 4) hash form password
+            # 4) if not True
                 flash("Incorrect password")
+                # 5) show
                 is_valid=False
+                # 6) change is_valid
         else:
         # 3) IF NO EMAIL IN DB
+            # 4) no passwords need to be validated or hashed 
             flash("Not a valid email")
+            # 5) show
             is_valid=False
+            # 6) change is_valid
 
         return is_valid
+        # 7) return is_valid
 
 
 
@@ -152,7 +157,6 @@ class User:
             flash("Password must contain: 1 upper, 1 lower, 1 special character, 1 number.")
             is_valid=False
         return is_valid
-    
 
     '''QUERY'''
     @classmethod
@@ -170,7 +174,6 @@ class User:
     '''VALIDATE'''
     @staticmethod
     def validate_update(e):
-        print(e)
         is_valid=True
         found_email = User.is_email(e)
         found_user = User.select_one(e)
@@ -189,30 +192,32 @@ class User:
         if found_email and found_email["email"] != found_user.email:
         # 1) if input email is found
         # 1) and inputed email != the email found when searching the data id
+        # 1) if T & T == T
             flash("Email taken, and not by you🤷‍♀️")
             is_valid=False
         if not EMAIL_REGEX.match(e["email"]):
-        # 1) if it is not email format
+        # 2) if it is not email format
             flash("Invalid email")
             is_valid=False
         if e["email"] != e["confirm_email"]:
-        # 3) if email's don't match
-            flash("Email's are not the same🤷‍♀️")
+        # 3) check confirm entry match
+            flash("Emails are not the same🤷‍♀️")
             is_valid=False
         '''password'''
         if not bcrypt.check_password_hash(found_user.password, e["password"]):
         # 1) check current user
-        # 1) hash the password inputted, compare with the select_one(data(id:id)) password
+        # 1) compare user's hashed password
+        # 1) with form's password to hash
             flash("Present password doesn't match")
             is_valid=False
         if e["new_pass"]:
-        # 2) if there is a new password
+        # 2) IF THERE IS A NEW PASSWORD:
             if e["new_pass"] != e["new_pass_check"]:
-            # 2) check new password matches confirm pass
+            # 3) check confirm entry match
                 flash("Passwords do not match🤷‍♀️")
                 is_valid=False
             if not PASSWORD_REGEX.match(e["new_pass"]):
-            # 2) check new password format
+            # 4) check new password format wtih regex
                 flash("Password must contain: 1 upper, 1 lower, 1 special character, 1 number.")
                 is_valid=False
         return is_valid
@@ -222,7 +227,7 @@ class User:
     def update(cls, data):
         query="UPDATE users SET first_name=%(first_name)s, last_name=%(last_name)s, email=%(email)s, password=%(password)s WHERE id=%(id)s"
         return connectToMySQL(cls.db).query_db(query,data)
-    
+
 
 
 

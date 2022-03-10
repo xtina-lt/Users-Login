@@ -2,7 +2,7 @@
 {%block title%} Users {%endblock%}
 {%block header%} Peeps {%endblock%}
 {%block main%}
-{% if session %}
+{% if session["logged_in"] %}
     <table>
         <th>
             ID
@@ -16,7 +16,7 @@
         <th>
             Email
         </th>
-        {% if session["logged_in"] == 0 %}
+        {% if session["logged_in"] == 1000 %}
             <th>
                 Options
             </th>
@@ -36,7 +36,7 @@
                 <td>
                     {{i.email}}
                 </td>
-                {% if session["logged_in"] == 0 %}
+                {% if session["logged_in"] == 1000 %}
                     <td>
                         <a href='/user/update/{{i.id}}'>Edit</a> |
                         <a href='/user/delete/{{i.id}}'>Delete</a>
